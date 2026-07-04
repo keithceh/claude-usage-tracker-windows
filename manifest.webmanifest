@@ -1,0 +1,17 @@
+{
+  "name": "Claude Usage Tracker",
+  "short_name": "Claude Usage",
+  "description": "Local dashboard for Claude tool usage, cost, plan limits, and efficiency coaching. 100% offline — no data leaves your machine.",
+  "start_url": "/dashboard.html",
+  "display": "standalone",
+  "background_color": "#0b1120",
+  "theme_color": "#0b1120",
+  "icons": [
+    {
+      "src": "assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+/* ── Efficiency Coach panel ─────────────────────────────── */
+/* Piggybacks on .limits-section container + .limit-bar styles. */
+
+.efficiency-section .eff-title::before {
+  background: linear-gradient(180deg, #34d399, #22d3ee) !important;
+}
+.eff-note { font-size: 0.7rem; color: #64748b; font-style: italic; }
+
+.eff-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
+}
+.eff-card {
+  background: linear-gradient(135deg, rgba(52, 211, 153, 0.05), rgba(34, 211, 238, 0.04));
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 10px;
+  padding: 0.8rem;
+}
+.eff-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+.eff-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin-bottom: 0.35rem;
+}
+.eff-sub { font-size: 0.68rem; color: #64748b; margin-top: 0.35rem; }
+
+.eff-flags { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+.eff-flag {
+  font-size: 0.78rem;
+  color: #cbd5e1;
+  background: rgba(251, 191, 36, 0.07);
+  border-left: 3px solid #fbbf24;
+  border-radius: 0 6px 6px 0;
+  padding: 0.45rem 0.7rem;
+}
+.eff-flag b { color: #e2e8f0; font-weight: 600; }
+.eff-flag-ok { background: rgba(52, 211, 153, 0.07); border-left-color: #34d399; color: #94a3b8; }
+
+.eff-digest-title {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  padding-top: 0.6rem;
+  border-top: 1px dashed rgba(148, 163, 184, 0.15);
+}
+.eff-digest-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.6rem;
+}
+.eff-digest-cell {
+  background: rgba(30, 41, 59, 0.35);
+  border-radius: 8px;
+  padding: 0.6rem 0.7rem;
+}
+.eff-digest-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+.eff-delta { font-size: 0.72rem; font-weight: 500; margin-left: 0.25rem; }
+.eff-good { color: #34d399; }
+.eff-bad  { color: #fb7185; }
+
+body[data-show-efficiency="false"] .efficiency-section { display: none !important; }
+
+/* Budget number inputs in the customizer panel (styled here because
+   customizer.css is out of scope for this feature). */
+input.cust-num {
+  width: 90px;
+  background: rgba(15, 22, 41, 0.7);
+  color: #e2e8f0;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 5px;
+  padding: 0.2rem 0.4rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+}
