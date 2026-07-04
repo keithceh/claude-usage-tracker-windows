@@ -27,7 +27,7 @@ Claude Code CLI, Claude Desktop (local agent sessions), Cursor, Windsurf, Cline,
 Requirements: Windows 10/11, [Node.js 16+](https://nodejs.org/).
 
 ```bat
-git clone https://github.com/YOURNAME/claude-usage-tracker-windows
+git clone https://github.com/keithceh/claude-usage-tracker-windows
 cd claude-usage-tracker-windows
 setup.bat
 ```
