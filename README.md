@@ -36,7 +36,13 @@ setup.bat
 
 ## Get notified of updates
 
-Click **Watch → Custom → Releases** on this repo. GitHub emails you when a new version ships. The app itself never phones home — updating is always your action: pull the release, re-run `setup.bat`. Your data is preserved.
+Click **Watch → Custom** on this repo and tick **Releases + Issues**. You'll get:
+
+1. **Release notification** the moment a version ships (GitHub release email)
+2. **One-week reminder** — an announcement issue opens 7 days after each release, in case the first email got buried
+3. **Monthly digest** — every first Monday, an issue summarizing releases and issue activity since the last digest
+
+All three happen on GitHub's side. The app itself never phones home — updating is always your action: pull the release, re-run `setup.bat`. Your data is preserved.
 
 ## Documentation
 

@@ -1,0 +1,47 @@
+# Notification #2: one week after each release, open an announcement issue
+# reminding watchers the release exists. GitHub cannot re-send the original
+# release email, so the reminder rides on issue notifications instead
+# (Watch -> All Activity, or Custom -> Issues).
+#
+# Runs daily; a release qualifies on the day its age crosses exactly 7 days,
+# and a title-search guard makes the job idempotent.
+name: Release reminder
+
+on:
+  schedule:
+    - cron: '15 9 * * *'   # daily 09:15 UTC
+  workflow_dispatch:        # manual test from the Actions tab
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Open reminder issues for releases published 7 days ago
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          now=$(date -u +%s)
+          gh api "repos/$REPO/releases?per_page=20" \
+            --jq '.[] | select(.draft == false) | [.tag_name, .published_at, .html_url] | @tsv' |
+          while IFS=$'\t' read -r tag published url; do
+            pub=$(date -u -d "$published" +%s)
+            age_days=$(( (now - pub) / 86400 ))
+            [ "$age_days" -eq 7 ] || continue
+
+            title="Reminder: $tag was released one week ago"
+            existing=$(gh issue list --repo "$REPO" --state all \
+              --search "\"$title\" in:title" --json number --jq 'length')
+            if [ "$existing" -eq 0 ]; then
+              body=$(printf 'One-week reminder that **%s** is available: %s\n\nIf you have not updated yet: download the release and re-run `setup.bat` over your existing install location — your `data/` history is preserved.\n\n_Automated reminder. The app itself never phones home; notifications happen entirely on GitHub'"'"'s side._' "$tag" "$url")
+              gh issue create --repo "$REPO" --title "$title" --body "$body"
+              echo "Opened reminder for $tag"
+            else
+              echo "Reminder for $tag already exists, skipping"
+            fi
+          done

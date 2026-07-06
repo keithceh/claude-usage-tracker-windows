@@ -1,0 +1,73 @@
+# First Monday of every month: open a digest issue summarizing releases and
+# issue activity since the previous digest. Watchers subscribed to issues
+# (Watch -> All Activity, or Custom -> Issues) get notified by GitHub.
+#
+# Cron can't express "first Monday" directly, so it fires every Monday and
+# the first step exits unless the day of month is 1-7.
+name: Monthly digest
+
+on:
+  schedule:
+    - cron: '0 9 * * 1'    # every Monday 09:00 UTC
+  workflow_dispatch:        # manual test from the Actions tab
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build and post digest (first Monday only)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          dom=$(date -u +%-d)
+          if [ "$dom" -gt 7 ] && [ "${GITHUB_EVENT_NAME}" = "schedule" ]; then
+            echo "Not the first Monday (day $dom) — skipping"
+            exit 0
+          fi
+
+          # "Since last update" = creation date of the previous digest issue;
+          # falls back to 31 days ago for the first run.
+          since=$(gh issue list --repo "$REPO" --state all \
+            --search "\"Monthly digest:\" in:title sort:created-desc" \
+            --json createdAt --jq '.[0].createdAt // empty')
+          if [ -z "$since" ]; then
+            since=$(date -u -d '31 days ago' +%Y-%m-%dT%H:%M:%SZ)
+          fi
+          since_date=${since%%T*}
+          echo "Digest window since: $since"
+
+          # Releases published since the last digest
+          releases=$(gh api "repos/$REPO/releases?per_page=30" --jq \
+            --arg since "$since" \
+            '[.[] | select(.draft == false and .published_at > $since)] |
+             map("- [\(.tag_name)](\(.html_url)) — \(.published_at[:10])") | join("\n")')
+          [ -n "$releases" ] || releases="_No new releases this period._"
+
+          # Issues opened / closed since the last digest (digests excluded)
+          opened=$(gh issue list --repo "$REPO" --state all \
+            --search "created:>=$since_date -\"Monthly digest:\" in:title" \
+            --json number,title --jq \
+            'map("- #\(.number) \(.title)") | join("\n")')
+          [ -n "$opened" ] || opened="_None._"
+
+          closed=$(gh issue list --repo "$REPO" --state closed \
+            --search "closed:>=$since_date -\"Monthly digest:\" in:title" \
+            --json number,title --jq \
+            'map("- #\(.number) \(.title)") | join("\n")')
+          [ -n "$closed" ] || closed="_None._"
+
+          month=$(date -u '+%B %Y')
+          body=$(printf '%s\n\n## Releases\n%s\n\n## Issues opened\n%s\n\n## Issues closed\n%s\n\n_Automated digest since %s. Subscribe: Watch → Custom → Issues + Releases._' \
+            "Summary of project activity since the last digest." \
+            "$releases" "$opened" "$closed" "$since_date")
+
+          gh issue create --repo "$REPO" \
+            --title "Monthly digest: $month" \
+            --body "$body"
