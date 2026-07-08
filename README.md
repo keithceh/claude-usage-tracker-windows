@@ -32,7 +32,7 @@ cd claude-usage-tracker-windows
 setup.bat
 ```
 
-`setup.bat` asks where to install (default `%LOCALAPPDATA%\ClaudeUsageTracker` — your choice), then launches the dashboard at `http://127.0.0.1:8765/`. Full instructions: [docs/INSTALL.md](docs/INSTALL.md).
+`setup.bat` asks where to install — Enter accepts the recommended default **`%LOCALAPPDATA%\ClaudeUsageTracker`** (user-owned, local, secure), or type any path you prefer. Then it launches the dashboard at `http://127.0.0.1:8765/`. Full instructions: [docs/INSTALL.md](docs/INSTALL.md).
 
 ## Get notified of updates
 

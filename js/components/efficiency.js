@@ -57,8 +57,18 @@
         <div class="eff-digest-title">This week vs last week</div>
         <div class="eff-digest-grid" id="eff-digest"></div>
       </div>`;
-    const anchor = document.getElementById('limits-section') ||
-                   document.querySelector('.container .stats-grid') ||
+    // Dock the coach LEFT of Plan Usage Limits in a shared responsive row —
+    // habit feedback should be the first thing the eye lands on.
+    const limits = document.getElementById('limits-section');
+    if (limits && limits.parentElement) {
+      const row = document.createElement('div');
+      row.className = 'coach-row';
+      limits.parentElement.insertBefore(row, limits);
+      row.appendChild(el);      // left column
+      row.appendChild(limits);  // right column
+      return;
+    }
+    const anchor = document.querySelector('.container .stats-grid') ||
                    document.querySelector('.container')?.firstElementChild;
     if (anchor && anchor.parentElement) anchor.parentElement.insertBefore(el, anchor.nextSibling);
   }

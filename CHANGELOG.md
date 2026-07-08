@@ -2,6 +2,18 @@
 
 All notable changes to this project. Format: [Keep a Changelog](https://keepachangelog.com/); versioning: [SemVer](https://semver.org/).
 
+## [1.1.0] — 2026-07-08
+
+### Changed
+- **Efficiency Coach docked left**: coach and Plan Usage Limits now share a responsive two-column row (coach on the left) on screens ≥1100px, so habit feedback is the first thing you see; stacks vertically on narrow screens
+- **Readability pass**: raised the smallest font sizes across both panels (labels, sub-text, footers ~15–20% larger)
+- Install docs now explain *why* `%LOCALAPPDATA%\ClaudeUsageTracker` is the recommended default (user-owned ACLs, local disk, machine-specific) and warn against shared/network locations
+
+### Added
+- Release-reminder workflow: an announcement issue opens one week after each release
+- Monthly-digest workflow: first Monday of each month, an issue summarizes releases and issue activity since the previous digest
+- Release workflow accepts a hand-written `RELEASE_NOTES.md` (falls back to auto-generated notes)
+
 ## [1.0.0] — 2026-07-04
 
 Initial public release. Windows port of [658jjh/claude-usage-tracker](https://github.com/658jjh/claude-usage-tracker).

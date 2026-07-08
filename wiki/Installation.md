@@ -10,7 +10,7 @@
 
 1. Grab the [latest release](https://github.com/keithceh/claude-usage-tracker-windows/releases/latest) or `git clone https://github.com/keithceh/claude-usage-tracker-windows`.
 2. Double-click **`setup.bat`**.
-3. Pick your install location (Enter = `%LOCALAPPDATA%\ClaudeUsageTracker`; any path you prefer works).
+3. Pick your install location — Enter accepts **`%LOCALAPPDATA%\ClaudeUsageTracker`**, the recommended default (user-owned ACLs, fast local disk, machine-specific by Windows convention). Any path works, but avoid shared/network locations — anyone with write access there could modify code that runs under your account.
 4. Answer Y/N to auto-start with Claude Desktop.
 5. Dashboard opens at `http://127.0.0.1:8765/`.
 

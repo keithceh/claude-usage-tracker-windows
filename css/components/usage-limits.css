@@ -76,7 +76,7 @@
 }
 
 .limit-label {
-  font-size: 0.7rem;
+  font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: #94a3b8;
@@ -114,7 +114,7 @@
 .limit-meta {
   display: flex;
   justify-content: space-between;
-  font-size: 0.75rem;
+  font-size: 0.82rem;
   color: #94a3b8;
 }
 .limit-meta strong {
@@ -127,7 +127,7 @@
   margin-top: 0.6rem;
   padding-top: 0.5rem;
   border-top: 1px dashed rgba(148, 163, 184, 0.15);
-  font-size: 0.75rem;
+  font-size: 0.82rem;
   color: #94a3b8;
 }
 .limit-secondary span {
@@ -145,7 +145,7 @@
   background: rgba(30, 41, 59, 0.4);
   border: 1px dashed rgba(148, 163, 184, 0.2);
   border-radius: 8px;
-  font-size: 0.75rem;
+  font-size: 0.82rem;
   color: #94a3b8;
 }
 .limits-custom label {
@@ -178,7 +178,7 @@
   margin-bottom: 0.35rem;
 }
 .limit-sub-label {
-  font-size: 0.65rem;
+  font-size: 0.82rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-weight: 600;
@@ -202,7 +202,7 @@
 
 .limits-calibrate {
   margin-top: 0.75rem;
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   color: #94a3b8;
   display: flex;
   flex-direction: column;
@@ -223,7 +223,7 @@
   border-radius: 5px;
   padding: 0.15rem 0.35rem;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.75rem;
+  font-size: 0.82rem;
 }
 .limits-calibrate button {
   background: linear-gradient(135deg, rgba(34, 211, 238, 0.15), rgba(167, 139, 250, 0.15));
@@ -232,14 +232,14 @@
   padding: 0.2rem 0.55rem;
   border-radius: 6px;
   font-family: inherit;
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   cursor: pointer;
 }
 .limits-calibrate button:hover { background: rgba(34, 211, 238, 0.25); }
 
 .limits-footer {
   margin-top: 0.5rem;
-  font-size: 0.68rem;
+  font-size: 0.78rem;
   color: #64748b;
   font-style: italic;
   line-height: 1.4;

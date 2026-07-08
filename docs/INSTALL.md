@@ -10,7 +10,7 @@
 
 1. Download the [latest release](../../releases/latest) (or `git clone` the repo).
 2. Double-click **`setup.bat`**.
-3. Choose your install location when prompted (Enter accepts the default `%LOCALAPPDATA%\ClaudeUsageTracker`).
+3. Choose your install location when prompted — pressing Enter accepts **`%LOCALAPPDATA%\ClaudeUsageTracker`**, the recommended default: it's user-owned (no other account can modify code that runs at your logon), on fast local disk, and machine-specific by Windows convention. Any custom path works, but avoid shared or network locations — see [SECURITY.md](../SECURITY.md).
 4. Choose whether to auto-start with Claude Desktop.
 5. The dashboard opens at `http://127.0.0.1:8765/`.
 
