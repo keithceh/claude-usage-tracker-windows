@@ -109,23 +109,27 @@ try {
   Log "WMI subscription failed: $_"
 }
 
-# Periodic data refresh on a separate .NET timer.
+# Periodic refresh runs INSIDE the keep-alive loop, not on an event timer.
+# History: watcher instances kept dying before their first 60-minute tick,
+# so no event-timer refresh ever fired in production. The loop approach is
+# immune to event-queue issues, and the hourly heartbeat line makes any
+# future silent death diagnosable from the log.
+Log "Periodic refresh loop started (every ${IntervalMinutes}m)"
+$lastRefresh = Get-Date
+$lastHeartbeat = Get-Date
 try {
-  $timer = New-Object System.Timers.Timer
-  $timer.Interval = $IntervalMinutes * 60 * 1000
-  $timer.AutoReset = $true
-  Register-ObjectEvent -InputObject $timer -EventName Elapsed `
-    -SourceIdentifier 'PeriodicRefresh' -Action { Refresh-Data } | Out-Null
-  $timer.Start()
-  Log "Periodic timer started"
-} catch {
-  Log "Periodic timer setup failed: $_"
-}
-
-# Keep the script alive so registered events keep firing. If we ever fall
-# out of this loop, log it - Task Scheduler will restart us.
-try {
-  while ($true) { Start-Sleep -Seconds 60 }
+  while ($true) {
+    Start-Sleep -Seconds 60
+    $now = Get-Date
+    if (($now - $lastRefresh).TotalMinutes -ge $IntervalMinutes) {
+      Refresh-Data
+      $lastRefresh = Get-Date
+    }
+    if (($now - $lastHeartbeat).TotalMinutes -ge 60) {
+      Log "heartbeat (PID=$PID)"
+      $lastHeartbeat = $now
+    }
+  }
 } finally {
   Log "watch-claude exiting (PID=$PID)"
 }

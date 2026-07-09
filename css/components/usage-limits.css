@@ -246,3 +246,11 @@
 }
 
 body[data-show-limits="false"] .limits-section { display: none !important; }
+
+.limits-calibrate-msg {
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  color: #fbbf24;
+  min-height: 1em;
+}
+.limits-calibrate-msg.ok { color: #34d399; }

@@ -1,16 +1,14 @@
-# v1.1.0 — Coach takes the wheel 🏎️
+# v1.1.1 — The windows roll again 🔄
 
-Your efficiency coach just moved into the driver's seat — **docked left**, first thing you see, right where your worst habits can't hide. Plan limits ride shotgun in a clean two-column row that collapses gracefully on smaller screens.
+Two quiet bugs, both loud in effect: calibration that shrugged at your clicks, and rolling windows frozen in the past. Both dead.
 
-## What's new
+## Fixed
 
-- 🎯 **Coach on the left** — habit feedback before anything else; responsive two-column layout with Plan Usage Limits
-- 👓 **Readability pass** — every squint-sized label got bigger; your eyes will notice, your posture will thank you
-- 🔔 **Never miss a release** — a reminder issue opens one week after every release, and a digest of releases + issues lands every first Monday. Subscribe once: **Watch → Custom → Releases + Issues**
-- 🏠 **Smarter install guidance** — docs now explain why `%LOCALAPPDATA%\ClaudeUsageTracker` is the default worth keeping: user-owned, local, nothing shared, nothing phoning home
+- 🎯 **Calibrate talks back** — every click now answers: your new cap (in green), or exactly why not — bad percentage, or no usage in the window with the data's age and the fix. No more silent shrugs.
+- ⏰ **The hourly refresh is real now** — the background refresh moved out of a fragile event timer into the watcher's main loop, with an hourly heartbeat in the log so a dead watcher can never hide again. Your 5-hour and weekly windows track live usage: watcher, browser self-heal, and manual refresh all verified.
 
-## Unchanged, on purpose
+## Update
 
-Zero outbound requests. Zero dependencies. Your data never leaves your machine.
+Grab the release, re-run `setup.bat` over your install — history preserved. If you use autostart, re-run `install-autostart.bat` once so the fixed watcher is registered.
 
-**Update:** grab the release, re-run `setup.bat` over your install — history preserved.
+Zero outbound requests. Zero dependencies. As always.

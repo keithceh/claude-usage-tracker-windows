@@ -159,6 +159,7 @@
           </label>
           <button type="button" id="limits-calibrate-week-btn">calibrate weekly</button>
         </div>
+        <div class="limits-calibrate-msg" id="limits-calibrate-msg"></div>
       </div>
       <div class="limits-footer">
         Caps are public estimates of compute budget in $-equivalent API spend,
@@ -213,13 +214,32 @@
 
     // Calibrate buttons — back-compute the implied cap from a user-entered
     // "Claude.ai shows X% used" reading. Math: cap = used / (pct / 100).
-    function calibrate(windowMs, pctInputId, field, inputId) {
+    // Every outcome (success or why-not) is reported in the message line —
+    // silent no-ops made this feature look broken.
+    function say(msg, ok) {
+      const el = document.getElementById('limits-calibrate-msg');
+      if (!el) return;
+      el.textContent = msg;
+      el.classList.toggle('ok', !!ok);
+    }
+    function calibrate(windowMs, pctInputId, field, inputId, label) {
       const pctEl = document.getElementById(pctInputId);
       const pct = Number(pctEl.value);
-      if (!pct || pct <= 0 || pct > 100) return;
+      if (!pct || pct <= 0 || pct > 100) {
+        say(`Enter the ${label} percentage from claude.ai (1–100) first.`);
+        return;
+      }
+      const events = window.__COST_EVENTS__ || [];
       const since = Date.now() - windowMs;
-      const cost = sumCostInWindow(window.__COST_EVENTS__ || [], since);
-      if (cost <= 0) return;
+      const cost = sumCostInWindow(events, since);
+      if (cost <= 0) {
+        const newest = events.length ? events[events.length - 1].t : 0;
+        const ageMin = newest ? Math.round((Date.now() - newest) / 60000) : null;
+        say(ageMin !== null && ageMin > windowMs / 60000
+          ? `No usage inside the ${label} window — newest data is ${ageMin} min old. Hit refresh, then calibrate.`
+          : `No usage recorded in the ${label} window yet — use Claude a bit, refresh, then calibrate.`);
+        return;
+      }
       const impliedCap = cost / (pct / 100);
       state.plan = 'custom';
       state[field] = Math.round(impliedCap * 100) / 100;
@@ -228,11 +248,12 @@
       const inp = document.getElementById(inputId);
       if (inp) inp.value = state[field];
       render(state);
+      say(`${label} cap calibrated: ${fmtMoney(state[field])} (from ${fmtMoney(cost)} at ${pct}%). Plan switched to Custom.`, true);
     }
     document.getElementById('limits-calibrate-5h-btn').addEventListener('click',
-      () => calibrate(5 * 3600 * 1000, 'limits-calibrate-5h-pct', 'custom5h', 'limits-custom-5h'));
+      () => calibrate(5 * 3600 * 1000, 'limits-calibrate-5h-pct', 'custom5h', 'limits-custom-5h', '5-hour'));
     document.getElementById('limits-calibrate-week-btn').addEventListener('click',
-      () => calibrate(7 * 86400 * 1000, 'limits-calibrate-week-pct', 'customWeek', 'limits-custom-week'));
+      () => calibrate(7 * 86400 * 1000, 'limits-calibrate-week-pct', 'customWeek', 'limits-custom-week', 'weekly'));
   }
 
   function sumCostInWindow(events, sinceMs, predicate) {

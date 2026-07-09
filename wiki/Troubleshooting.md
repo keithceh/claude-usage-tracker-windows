@@ -20,7 +20,7 @@ schtasks /query /tn ClaudeUsageTracker-Watcher /fo LIST /v
 |---|---|
 | Task not found | Re-run `install-autostart.bat` |
 | `Last Result: 1` | Task points at a stale path (folder moved?) — re-run `install-autostart.bat` from the current install |
-| Running but silent | Read `data\watch-claude.log` — every action is logged |
+| Running but silent | Read `data\watch-claude.log` — every action is logged, and a healthy watcher writes an hourly `heartbeat` line |
 
 ## Port 8765 in use
 

@@ -18,7 +18,7 @@ schtasks /query /tn ClaudeUsageTracker-Watcher /fo LIST /v
 
 - **Task missing** → re-run `install-autostart.bat`.
 - **Last Result: 1** → the task's path is stale (e.g. you moved the install folder). Re-run `install-autostart.bat` from the new location.
-- **Status: Running but nothing happens** → read `data\watch-claude.log`; every action is logged.
+- **Status: Running but nothing happens** → read `data\watch-claude.log`; every action is logged, and a healthy watcher writes an hourly `heartbeat` line — no recent heartbeat means it died.
 
 Common root causes we've hardened against (for the curious): PowerShell 5.1 rejects UNC paths with `-File`; scripts without a BOM must be pure ASCII; `pushd` drive letters must never be persisted into the task definition.
 
