@@ -10,7 +10,7 @@ They're a compute-value proxy: what your usage *would* cost at API prices. It's 
 The caps are public estimates. Read the real percentage from claude.ai → Settings → Usage and use the **calibrate** buttons — the panel then back-computes your true cap and tracks against it.
 
 **Why are Opus and Fable metered separately?**
-Anthropic applies separate premium-model quotas. Keeping the meters independent means heavy Fable use never hides Opus burn (and vice versa). Both stay visible whenever your plan carries a cap for them.
+Anthropic applies separate premium-model quotas. Keeping the meters independent means heavy Fable use never hides Opus burn (and vice versa). Both stay visible whenever your plan carries a cap for them. Since July 7, 2026, Fable on subscriptions is metered as usage credits rather than a fixed quota, and per-plan allotments aren't published; the tracker defaults Fable's sub-cap to the pre-switch guidance of 50% of your plan's weekly limit — calibrate via Custom for your real number.
 
 **How do I get update notifications?**
 GitHub → **Watch → Custom → Releases**. GitHub emails you; the app itself never checks for updates (that would be an outbound call).

@@ -2,6 +2,16 @@
 
 All notable changes to this project. Format: [Keep a Changelog](https://keepachangelog.com/); versioning: [SemVer](https://semver.org/).
 
+## [1.2.0] — 2026-07-14
+
+### Fixed
+- **Dead dashboard server now self-heals on every Claude Desktop launch.** The watcher previously used a once-per-session flag to decide whether to launch the dashboard server, so a server that died mid-session stayed dead until next logon. It now port-checks the dashboard server on every Claude Desktop launch and relaunches it if it's not responding.
+
+### Changed
+- **Fable 5 pricing corrected to Anthropic's official July 2026 API rates**: $10/M input, $50/M output, $1/M cache read, $12.50/M cache write (was a $5/$25 placeholder estimate). Fable costs now roughly double what was previously reported — the usage didn't change, the price did.
+- **Fable plan sub-caps follow Anthropic's July 7, 2026 policy**: Fable on subscriptions is now metered as usage credits, with per-plan allotments unpublished. Following the pre-switch guidance ("up to 50% of weekly usage limits"), the tracker now defaults Fable sub-caps to 50% of each plan's window caps; calibrate via Custom for your real number.
+- localStorage key bumped to `cut-limits-v5` (new Fable defaults require a clean slate).
+
 ## [1.1.1] — 2026-07-09
 
 ### Fixed

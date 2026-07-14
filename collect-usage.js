@@ -83,10 +83,11 @@ function parseTimestamp(ts) {
 function getPricing(model) {
   if (!model) return { input: 3, output: 15, cacheWrite: 3.75, cacheRead: 0.30 };
   const m = model.toLowerCase();
-  // ponytail: Fable 5 pricing not published — assume flagship tier matching
-  // Opus 4.5+ ($5/$25). Bump when Anthropic posts real numbers.
+  // Official Fable 5 API pricing (Anthropic, July 2026): $10/M input,
+  // $50/M output, cache read $1/M (90% input discount), cache write
+  // $12.50/M (standard 1.25x input).
   if (m.includes('fable'))
-    return { input: 5, output: 25, cacheWrite: 6.25, cacheRead: 0.50 };
+    return { input: 10, output: 50, cacheWrite: 12.5, cacheRead: 1.0 };
   if (m.includes('opus-5'))
     return { input: 20, output: 100, cacheWrite: 25, cacheRead: 2.0 };
   if (m.includes('opus-4-5') || m.includes('opus-4.5') || m.includes('opus-4-6') || m.includes('opus-4.6') || m.includes('opus-4-7') || m.includes('opus-4.7') || m.includes('opus-4-8') || m.includes('opus-4.8') || m.includes('opus-4-9') || m.includes('opus-4.9'))

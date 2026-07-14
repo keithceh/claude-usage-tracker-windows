@@ -10,7 +10,7 @@ It's a compute-value proxy: what your usage *would* cost at API prices. It's the
 Expected — the caps are estimates until you calibrate. Read the real % from claude.ai → Settings → Usage and use the calibrate buttons; the panel then tracks your true cap.
 
 **Why separate Opus and Fable meters?**
-Separate quotas upstream, so merged meters would let one family's burn hide the other's. Independent meters keep both visible. Mythos counts with Fable.
+Separate quotas upstream, so merged meters would let one family's burn hide the other's. Independent meters keep both visible. Mythos counts with Fable. Since July 7, 2026, Fable on subscriptions is metered as usage credits with unpublished per-plan allotments, so the tracker defaults Fable's cap to 50% of the plan's weekly limit — calibrate via Custom for your real number.
 
 **How do updates work?**
 **Watch → Custom → Releases** on GitHub — you get an email per release. The app never phones home; updating is always your action (`setup.bat` over the same location, data preserved).

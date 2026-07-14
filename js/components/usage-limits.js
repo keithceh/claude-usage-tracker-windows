@@ -20,26 +20,28 @@
  * (or "Custom"). Persisted in localStorage.
  */
 (function () {
-  const KEY = 'cut-limits-v4';
+  const KEY = 'cut-limits-v5';
 
   // Plan caps tuned to Anthropic's published weekly-hours guidance,
-  // translated to API-spend-equivalent dollars. Fable sub-caps default to
-  // the same values as Opus (Anthropic has not published separate Fable
-  // metering; calibrate via Custom if your account behaves differently).
+  // translated to API-spend-equivalent dollars. Per Anthropic's July 7 2026
+  // policy, Fable on subscriptions moved to metered usage credits; the
+  // pre-switch guidance was "up to 50% of weekly usage limits" and per-plan
+  // credit allotments are unpublished, so Fable sub-caps default to 50% of
+  // each plan's overall per5h / perWeek. Calibrate via Custom if needed.
   const PLANS = {
     free:   { label: 'Free',         per5h: 0.5, perWeek: 2,   opusPer5h: 0,  opusPerWeek: 0,   fablePer5h: 0,  fablePerWeek: 0   },
     pro:    { label: 'Pro',          per5h: 8,   perWeek: 40,  opusPer5h: 0,  opusPerWeek: 0,   fablePer5h: 0,  fablePerWeek: 0   },
-    max5:   { label: 'Max 5×',       per5h: 40,  perWeek: 200, opusPer5h: 8,  opusPerWeek: 40,  fablePer5h: 8,  fablePerWeek: 40  },
-    max20:  { label: 'Max 20×',      per5h: 160, perWeek: 800, opusPer5h: 32, opusPerWeek: 160, fablePer5h: 32, fablePerWeek: 160 },
+    max5:   { label: 'Max 5×',       per5h: 40,  perWeek: 200, opusPer5h: 8,  opusPerWeek: 40,  fablePer5h: 20, fablePerWeek: 100 },
+    max20:  { label: 'Max 20×',      per5h: 160, perWeek: 800, opusPer5h: 32, opusPerWeek: 160, fablePer5h: 80, fablePerWeek: 400 },
     api:    { label: 'API (no cap)', per5h: 0,   perWeek: 0,   opusPer5h: 0,  opusPerWeek: 0,   fablePer5h: 0,  fablePerWeek: 0   },
-    custom: { label: 'Custom',       per5h: 40,  perWeek: 200, opusPer5h: 8,  opusPerWeek: 40,  fablePer5h: 8,  fablePerWeek: 40  },
+    custom: { label: 'Custom',       per5h: 40,  perWeek: 200, opusPer5h: 8,  opusPerWeek: 40,  fablePer5h: 20, fablePerWeek: 100 },
   };
 
   const DEFAULT_STATE = {
     plan: 'pro',
     custom5h: 40, customWeek: 200,
     customOpus5h: 8, customOpusWeek: 40,
-    customFable5h: 8, customFableWeek: 40,
+    customFable5h: 20, customFableWeek: 100,
   };
 
   function loadState() {
@@ -166,6 +168,9 @@
         based on Anthropic's published per-plan hours guidance. For exact
         remaining capacity, check Anthropic's settings page on claude.ai and
         use the calibrate buttons to lock in your real cap.
+        Fable 5 is metered as usage credits since July 2026; defaults assume
+        the pre-switch 50%-of-weekly guidance - calibrate via Custom against
+        your claude.ai usage page.
       </div>
     `;
     const container = document.querySelector('.container');

@@ -4,7 +4,7 @@
 
 Token counts from your logs × published per-model API prices (input / output / cache write / cache read). On a subscription you don't pay per token — the $ number is a **compute-value proxy**: the closest measurable stand-in for Anthropic's opaque plan-limit metric, and a consistent unit for comparing days, tools, and habits.
 
-Fable 5 pricing is an estimate (flagship tier) until official numbers exist; the constant sits at the top of `collect-usage.js`.
+Fable 5 uses Anthropic's official July 2026 rates: $10/M input, $50/M output.
 
 ## Plan Usage Limits
 
@@ -13,6 +13,8 @@ Anthropic meters plans by an unpublished compute metric over a rolling **5-hour*
 **Calibration** makes it *your* meter: read the real percentage from claude.ai → Settings → Usage, type it into the matching "Claude shows __%" box, click calibrate. The panel back-computes your true cap (`cap = spent ÷ pct`) and tracks against that from then on. Calibrate each window independently.
 
 **Opus and Fable sub-meters** are independent: Anthropic applies separate premium-model quotas, and mixing them would let heavy Fable use hide Opus burn. Mythos counts with Fable (same underlying model). Sub-meters appear whenever your plan (or custom calibration) carries a cap for them.
+
+Since July 7, 2026, Fable on subscriptions is metered as usage credits rather than a fixed quota, and Anthropic hasn't published per-plan allotments. The tracker defaults the Fable sub-cap to the last published pre-switch guidance — 50% of each plan's weekly limit — until you calibrate it via Custom with your own number.
 
 **Resets** show when the oldest event in the window rolls off — the earliest moment your usage meaningfully drops.
 

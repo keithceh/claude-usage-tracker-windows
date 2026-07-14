@@ -17,12 +17,6 @@ param(
   [int]$IntervalMinutes = 60
 )
 
-# Track whether we've already launched the dashboard this watcher session.
-# Once true, future claude.exe events only refresh data - they do NOT open
-# a new browser tab. This respects "launch once per Claude session, stay
-# on unless closed by user". Reset on watcher restart (i.e. next logon).
-$script:launchedThisSession = $false
-
 $ErrorActionPreference = 'Continue'
 
 # $PSScriptRoot is the directory the script file lives in - always set when
@@ -64,22 +58,25 @@ function Refresh-Data {
 }
 
 # Launch the dashboard (collector + server). Used on Claude Desktop start.
-# Only opens a browser tab on the FIRST call per watcher session - repeat
-# claude.exe launches just refresh data so the user isn't spammed with
-# new tabs every time they reopen Claude Desktop.
+# Decides launch-vs-refresh by checking whether the dashboard server is
+# actually listening on TCP port 8765, rather than a once-per-session flag.
+# The old $script:launchedThisSession flag left a dead server unrecoverable
+# until the next logon: once the flag flipped true, later claude.exe events
+# only refreshed data even if the server had crashed. The live port check
+# relaunches whenever the server is down and refreshes when it is up.
 function Launch-Tracker {
-  if ($script:launchedThisSession) {
-    Log "claude.exe detected - dashboard already launched this session, refreshing data only"
+  $up = [bool](Get-NetTCPConnection -LocalPort 8765 -State Listen -ErrorAction SilentlyContinue)
+  if ($up) {
+    Log "claude.exe detected - dashboard already up, refreshing data only"
     Refresh-Data
     return
   }
-  Log "claude.exe detected, launching dashboard (first time this session)"
+  Log "claude.exe detected - dashboard down, launching"
   try {
     Start-Process -FilePath 'cmd.exe' `
                   -ArgumentList '/c', "`"$bat`"" `
                   -WorkingDirectory $here `
                   -WindowStyle Hidden
-    $script:launchedThisSession = $true
   } catch {
     Log "Launch failed: $_"
   }
