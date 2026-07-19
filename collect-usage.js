@@ -487,6 +487,7 @@ function collectClaudeDesktop() {
   const sessions = [];
   const dirs = [
     path.join(APPDATA, 'Claude', 'local-agent-mode-sessions'),
+    path.join(LOCALAPPDATA, 'Packages', 'Claude_pzs8sxrjxfjjc', 'LocalCache', 'Roaming', 'Claude', 'local-agent-mode-sessions'),
     path.join(HOME, 'Library', 'Application Support', 'Claude', 'local-agent-mode-sessions'),
   ];
   for (const dir of dirs) {
