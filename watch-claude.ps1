@@ -92,32 +92,29 @@ try {
   }
 } catch { Log "Initial check error: $_" }
 
-# WMI subscription for claude.exe process-creation. Wrapped in try/catch
-# so a transient WMI failure doesn't kill the whole script - the periodic
-# timer will keep running data fresh as a fallback.
-try {
-  $query = "SELECT * FROM __InstanceCreationEvent WITHIN 5 " +
-           "WHERE TargetInstance ISA 'Win32_Process' " +
-           "AND TargetInstance.Name = 'claude.exe'"
-  Register-WmiEvent -Query $query -SourceIdentifier 'ClaudeDesktopStart' `
-    -Action { Launch-Tracker } | Out-Null
-  Log "WMI subscription registered"
-} catch {
-  Log "WMI subscription failed: $_"
-}
-
-# Periodic refresh runs INSIDE the keep-alive loop, not on an event timer.
-# History: watcher instances kept dying before their first 60-minute tick,
-# so no event-timer refresh ever fired in production. The loop approach is
-# immune to event-queue issues, and the hourly heartbeat line makes any
-# future silent death diagnosable from the log.
-Log "Periodic refresh loop started (every ${IntervalMinutes}m)"
+# Claude Desktop detection is POLLED in the keep-alive loop below, not
+# event-driven. History: neither Register-WmiEvent actions nor .NET timer
+# events ever fired in production here (event actions silently never ran;
+# the v1.1.1 fix moved the refresh into the loop, and mid-session WMI
+# detections stopped appearing in the log after the same rewrite). Polling
+# every 60s is the approach with a production track record. Latency for
+# dashboard auto-open after launching Claude is up to ~60s.
+Log "Main loop started (refresh every ${IntervalMinutes}m, claude.exe poll every 60s)"
 $lastRefresh = Get-Date
 $lastHeartbeat = Get-Date
+$claudeWasRunning = [bool](Get-Process -Name 'claude' -ErrorAction SilentlyContinue)
 try {
   while ($true) {
     Start-Sleep -Seconds 60
     $now = Get-Date
+
+    # Launch dashboard when Claude Desktop transitions to running.
+    $claudeNow = [bool](Get-Process -Name 'claude' -ErrorAction SilentlyContinue)
+    if ($claudeNow -and -not $claudeWasRunning) {
+      Launch-Tracker
+    }
+    $claudeWasRunning = $claudeNow
+
     if (($now - $lastRefresh).TotalMinutes -ge $IntervalMinutes) {
       Refresh-Data
       $lastRefresh = Get-Date

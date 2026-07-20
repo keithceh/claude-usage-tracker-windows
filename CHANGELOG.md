@@ -2,6 +2,11 @@
 
 All notable changes to this project. Format: [Keep a Changelog](https://keepachangelog.com/); versioning: [SemVer](https://semver.org/).
 
+## [1.2.1] — 2026-07-20
+
+### Fixed
+- **Dashboard now reliably auto-opens when Claude Desktop launches.** The WMI process-creation subscription registered fine but its event action never executed in production — the same event-delivery failure that silenced the hourly timer before v1.1.1, hiding in its last remaining spot. Claude Desktop detection now polls every 60 seconds inside the watcher's main loop (launch on the not-running→running transition); the WMI subscription is removed entirely. Detection latency is up to ~60s after launching Claude.
+
 ## [1.2.0] — 2026-07-14
 
 ### Fixed
